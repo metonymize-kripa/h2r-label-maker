@@ -2,271 +2,270 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>H2R Label Configurator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        /* Basic CSS for styling the page */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
+        /* Custom styles can go here */
 
-        .main-container {
-            display: flex;
-            justify-content: space-between;
-        }
+.canvas-container {
+    text-align: center; /* Center the canvas in the container */
+    max-width: 100%; /* Ensure the container doesn't overflow */
+}
 
-        .dropdown-container {
-            flex-basis: 40%; /* Adjust as needed */
-        }
+canvas {
+    max-width: 100%; /* Make canvas responsive */
+    height: auto; /* Maintain aspect ratio */
+}
 
-        .canvas-container {
-            flex-basis: 60%; /* Adjust as needed */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <h2>H2R Label Configurator</h2>
-    <div class="main-container">
-        <div class="dropdown-container">
-            <div class="container">
-                <label for="recyclingInstructions">Recycling Instructions:</label>
-                <select id="recyclingInstructions">
-                    <!-- Options for recyclingInstructions -->
-                </select>
+    <div class="container mt-3">
+        <h2 class="mb-4">H2R Label Configurator</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form>
+                    <div class="form-group">
+                        <label for="recyclingInstructions">Recycling Instructions:</label>
+                        <select id="recyclingInstructions" class="form-control">
+                            <!-- Options for recyclingInstructions -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recyclingCategories">Recycling Categories:</label>
+                        <select id="recyclingCategories" class="form-control">
+                            <!-- Options for recyclingCategories -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materials">Materials:</label>
+                        <select id="materials" class="form-control">
+                            <!-- Options for materials -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="packagingTypes">Packaging Types:</label>
+                        <select id="packagingTypes" class="form-control">
+                            <!-- Options for packagingTypes -->
+                        </select>
+                    </div>
+
+                    <button id="createButton" class="btn btn-primary">Create Label</button>
+                </form>
             </div>
 
-            <div class="container">
-                <label for="recyclingCategories">Recycling Categories:</label>
-                <select id="recyclingCategories">
-                    <!-- Options for recyclingCategories -->
-                </select>
+            <div id="canvasContainer" class="canvas-container col-md-6">
+                <!-- Canvas will be appended here -->
             </div>
-
-            <div class="container">
-                <label for="materials">Materials:</label>
-                <select id="materials">
-                    <!-- Options for materials -->
-                </select>
-            </div>
-
-            <div class="container">
-                <label for="packagingTypes">Packaging Types:</label>
-                <select id="packagingTypes">
-                    <!-- Options for packagingTypes -->
-                </select>
-            </div>
-
-            <button id="createButton">Create Label</button>
-        </div>
-
-        <div id="canvasContainer" class="canvas-container">
-            <!-- Canvas will be appended here -->
         </div>
     </div>
 
     <script>
         // JavaScript code goes here
-// Function to create a text image
-function createTextImage(text = "Rinse & Repeat", width = 450, height = 150) {
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext("2d");
+	// Function to create a text image
+	function createTextImage(text = "Rinse & Repeat", width = 450, height = 150) {
+	    let canvas = document.createElement("canvas");
+	    let ctx = canvas.getContext("2d");
 
-    // Set up the canvas with the specified width and height
-    canvas.width = width;
-    canvas.height = height;
+	    // Set up the canvas with the specified width and height
+	    canvas.width = width;
+	    canvas.height = height;
 
-    // Draw a white rectangle as the background
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, width, height);
+	    // Draw a white rectangle as the background
+	    ctx.fillStyle = "white";
+	    ctx.fillRect(0, 0, width, height);
 
-    // Draw a black border
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 8;
-    ctx.strokeRect(1, 1, width - 2, height - 2);
+	    // Draw a black border
+	    ctx.strokeStyle = "black";
+	    ctx.lineWidth = 8;
+	    ctx.strokeRect(1, 1, width - 2, height - 2);
 
-    // Set font properties
-    ctx.font = "16px Roboto";
-    ctx.fillStyle = "black";
+	    // Set font properties
+	    ctx.font = "16px Roboto";
+	    ctx.fillStyle = "black";
 
-    // Calculate text dimensions and position
-    let textWidth = ctx.measureText(text).width;
-    let textPositionX = (width - textWidth) / 2;
-    let textPositionY = height / 2; // Adjust this for better vertical alignment
+	    // Calculate text dimensions and position
+	    let textWidth = ctx.measureText(text).width;
+	    let textPositionX = (width - textWidth) / 2;
+	    let textPositionY = height / 2; // Adjust this for better vertical alignment
 
-    // Draw the text
-    ctx.fillText(text, textPositionX, textPositionY);
+	    // Draw the text
+	    ctx.fillText(text, textPositionX, textPositionY);
 
-    return canvas;
-}
-
-
-// Function to create a composite image from 4 text images
-function createCompositeImage(strings = ["Rinse Before Recycling", "Check Locally", "Plastic Tray", "Store Drop-Off"],
-                              heights = [150, 450, 150, 150],
-                              width = 450) {
-    let height = heights.reduce((a, b) => a + b, 0);
-    let compositeCanvas = document.createElement("canvas");
-    let ctx = compositeCanvas.getContext("2d");
-
-    // Set composite canvas size
-    compositeCanvas.width = width;
-    compositeCanvas.height = height;
-
-    // Create and draw each text image
-    let yOffset = 0;
-    for (let i = 0; i < strings.length; i++) {
-        let textCanvas = createTextImage(strings[i], width, heights[i]);
-        ctx.drawImage(textCanvas, 0, yOffset);
-        yOffset += heights[i];
-    }
-
-    return compositeCanvas;
-}
+	    return canvas;
+	}
 
 
-// Function to create a label using index lookup
-function createLabel(recyclingInstructionsIndex = 0, recyclingCategoriesIndex = 0, materialsIndex = 0, packagingTypesIndex = 0) {
-    // Arrays of strings
-     const recyclingInstructions = [
-    "Rinse & Insert Lid",
-    "Empty & Replace Cap",
-    "Empty Before Recycling",
-    "Rinse Before Recycling",
-    "Rinse & Replace Lid",
-    "Recycle If Clean & Dry",
-    "See Website For Cap",
-    "Remove Label Before Recycling",
-    "Empty & Discard Sprayer",
-    "Empty & Reattach Sprayer",
-    "Empty & Discard Pump",
-    "Empty & Reattach Pump"
-];
-     const recyclingCategories = [
-    "Widely Recycled",
-    "Limited Recycling",
-    "Not Yet Recycled",
-    "Store Drop-Off"
-];
-     const materials = [
-    "PLASTIC",
-    "PAPER",
-    "METAL",
-    "COATED PAPER",
-    "GLASS",
-    "MULTI-LAYER"
-];
-     const packagingTypes = [
-    "BOTTLE",
-    "TRAY",
-    "INSERT",
-    "BOX",
-    "BAG",
-    "WRAP",
-    "CAN",
-    "FILM",
-    "POUCH"
-];
- //   const recyclingInstructions = ["Rinse & Insert Lid", "Empty & Replace Cap", /* ... */ ];
- //   const recyclingCategories = ["Widely Recycled", "Limited Recycling", /* ... */ ];
- //   const materials = ["PLASTIC", "PAPER", /* ... */ ];
- //   const packagingTypes = ["BOTTLE", "TRAY", /* ... */ ];
+	// Function to create a composite image from 4 text images
+	function createCompositeImage(strings = ["Rinse Before Recycling", "Check Locally", "Plastic Tray", "Store Drop-Off"],
+				      heights = [150, 450, 150, 150],
+				      width = 450) {
+	    let height = heights.reduce((a, b) => a + b, 0);
+	    let compositeCanvas = document.createElement("canvas");
+	    let ctx = compositeCanvas.getContext("2d");
 
-    // Create the composite image
-    return createCompositeImage([
-        recyclingInstructions[recyclingInstructionsIndex],
-        recyclingCategories[recyclingCategoriesIndex],
-        materials[materialsIndex],
-        packagingTypes[packagingTypesIndex]
-    ]);
-}
+	    // Set composite canvas size
+	    compositeCanvas.width = width;
+	    compositeCanvas.height = height;
 
-// Function to populate dropdowns
-function populateDropdowns() {
-    // Arrays of strings
-     const recyclingInstructions = [
-    "Rinse & Insert Lid",
-    "Empty & Replace Cap",
-    "Empty Before Recycling",
-    "Rinse Before Recycling",
-    "Rinse & Replace Lid",
-    "Recycle If Clean & Dry",
-    "See Website For Cap",
-    "Remove Label Before Recycling",
-    "Empty & Discard Sprayer",
-    "Empty & Reattach Sprayer",
-    "Empty & Discard Pump",
-    "Empty & Reattach Pump"
-];
-     const recyclingCategories = [
-    "Widely Recycled",
-    "Limited Recycling",
-    "Not Yet Recycled",
-    "Store Drop-Off"
-];
-     const materials = [
-    "PLASTIC",
-    "PAPER",
-    "METAL",
-    "COATED PAPER",
-    "GLASS",
-    "MULTI-LAYER"
-];
-     const packagingTypes = [
-    "BOTTLE",
-    "TRAY",
-    "INSERT",
-    "BOX",
-    "BAG",
-    "WRAP",
-    "CAN",
-    "FILM",
-    "POUCH"
-];
+	    // Create and draw each text image
+	    let yOffset = 0;
+	    for (let i = 0; i < strings.length; i++) {
+		let textCanvas = createTextImage(strings[i], width, heights[i]);
+		ctx.drawImage(textCanvas, 0, yOffset);
+		yOffset += heights[i];
+	    }
 
-    //const recyclingInstructions = ["Rinse & Insert Lid", "Empty & Replace Cap", /* ... */ ];
-    //const recyclingCategories = ["Widely Recycled", "Limited Recycling", /* ... */ ];
-    //const materials = ["PLASTIC", "PAPER", /* ... */ ];
-    //const packagingTypes = ["BOTTLE", "TRAY", /* ... */ ];
+	    return compositeCanvas;
+	}
 
-    populateDropdown('recyclingInstructions', recyclingInstructions);
-    populateDropdown('recyclingCategories', recyclingCategories);
-    populateDropdown('materials', materials);
-    populateDropdown('packagingTypes', packagingTypes);
-}
 
-function populateDropdown(dropdownId, options) {
-    let dropdown = document.getElementById(dropdownId);
-    options.forEach((option, index) => {
-        let opt = document.createElement('option');
-        opt.value = index;
-        opt.innerHTML = option;
-        dropdown.appendChild(opt);
-    });
-}
+	// Function to create a label using index lookup
+	function createLabel(recyclingInstructionsIndex = 0, recyclingCategoriesIndex = 0, materialsIndex = 0, packagingTypesIndex = 0) {
+	    // Arrays of strings
+	     const recyclingInstructions = [
+	    "Rinse & Insert Lid",
+	    "Empty & Replace Cap",
+	    "Empty Before Recycling",
+	    "Rinse Before Recycling",
+	    "Rinse & Replace Lid",
+	    "Recycle If Clean & Dry",
+	    "See Website For Cap",
+	    "Remove Label Before Recycling",
+	    "Empty & Discard Sprayer",
+	    "Empty & Reattach Sprayer",
+	    "Empty & Discard Pump",
+	    "Empty & Reattach Pump"
+	];
+	     const recyclingCategories = [
+	    "Widely Recycled",
+	    "Limited Recycling",
+	    "Not Yet Recycled",
+	    "Store Drop-Off"
+	];
+	     const materials = [
+	    "PLASTIC",
+	    "PAPER",
+	    "METAL",
+	    "COATED PAPER",
+	    "GLASS",
+	    "MULTI-LAYER"
+	];
+	     const packagingTypes = [
+	    "BOTTLE",
+	    "TRAY",
+	    "INSERT",
+	    "BOX",
+	    "BAG",
+	    "WRAP",
+	    "CAN",
+	    "FILM",
+	    "POUCH"
+	];
+	 //   const recyclingInstructions = ["Rinse & Insert Lid", "Empty & Replace Cap", /* ... */ ];
+	 //   const recyclingCategories = ["Widely Recycled", "Limited Recycling", /* ... */ ];
+	 //   const materials = ["PLASTIC", "PAPER", /* ... */ ];
+	 //   const packagingTypes = ["BOTTLE", "TRAY", /* ... */ ];
 
-// Event listener for the 'Create Label' button
-document.getElementById('createButton').addEventListener('click', () => {
-    let recyclingInstructionsIndex = document.getElementById('recyclingInstructions').value;
-    let recyclingCategoriesIndex = document.getElementById('recyclingCategories').value;
-    let materialsIndex = document.getElementById('materials').value;
-    let packagingTypesIndex = document.getElementById('packagingTypes').value;
+	    // Create the composite image
+	    return createCompositeImage([
+		recyclingInstructions[recyclingInstructionsIndex],
+		recyclingCategories[recyclingCategoriesIndex],
+		materials[materialsIndex],
+		packagingTypes[packagingTypesIndex]
+	    ]);
+	}
 
-    let canvas = createLabel(recyclingInstructionsIndex, recyclingCategoriesIndex, materialsIndex, packagingTypesIndex);
-    let canvasContainer = document.getElementById('canvasContainer');
-    canvasContainer.innerHTML = ''; // Clear previous canvas
-    canvasContainer.appendChild(canvas); // Add new canvas
-});
+	// Function to populate dropdowns
+	function populateDropdowns() {
+	    // Arrays of strings
+	     const recyclingInstructions = [
+	    "Rinse & Insert Lid",
+	    "Empty & Replace Cap",
+	    "Empty Before Recycling",
+	    "Rinse Before Recycling",
+	    "Rinse & Replace Lid",
+	    "Recycle If Clean & Dry",
+	    "See Website For Cap",
+	    "Remove Label Before Recycling",
+	    "Empty & Discard Sprayer",
+	    "Empty & Reattach Sprayer",
+	    "Empty & Discard Pump",
+	    "Empty & Reattach Pump"
+	];
+	     const recyclingCategories = [
+	    "Widely Recycled",
+	    "Limited Recycling",
+	    "Not Yet Recycled",
+	    "Store Drop-Off"
+	];
+	     const materials = [
+	    "PLASTIC",
+	    "PAPER",
+	    "METAL",
+	    "COATED PAPER",
+	    "GLASS",
+	    "MULTI-LAYER"
+	];
+	     const packagingTypes = [
+	    "BOTTLE",
+	    "TRAY",
+	    "INSERT",
+	    "BOX",
+	    "BAG",
+	    "WRAP",
+	    "CAN",
+	    "FILM",
+	    "POUCH"
+	];
 
-// Populate dropdowns on page load
-populateDropdowns();
+	    //const recyclingInstructions = ["Rinse & Insert Lid", "Empty & Replace Cap", /* ... */ ];
+	    //const recyclingCategories = ["Widely Recycled", "Limited Recycling", /* ... */ ];
+	    //const materials = ["PLASTIC", "PAPER", /* ... */ ];
+	    //const packagingTypes = ["BOTTLE", "TRAY", /* ... */ ];
 
+	    populateDropdown('recyclingInstructions', recyclingInstructions);
+	    populateDropdown('recyclingCategories', recyclingCategories);
+	    populateDropdown('materials', materials);
+	    populateDropdown('packagingTypes', packagingTypes);
+	}
+
+	function populateDropdown(dropdownId, options) {
+	    let dropdown = document.getElementById(dropdownId);
+	    options.forEach((option, index) => {
+		let opt = document.createElement('option');
+		opt.value = index;
+		opt.innerHTML = option;
+		dropdown.appendChild(opt);
+	    });
+	}
+
+	// Modified Event listener for the 'Create Label' button
+	document.getElementById('createButton').addEventListener('click', (e) => {
+	    e.preventDefault(); // Prevent form submission
+
+	    let recyclingInstructionsIndex = document.getElementById('recyclingInstructions').value;
+	    let recyclingCategoriesIndex = document.getElementById('recyclingCategories').value;
+	    let materialsIndex = document.getElementById('materials').value;
+	    let packagingTypesIndex = document.getElementById('packagingTypes').value;
+
+	    let canvas = createLabel(recyclingInstructionsIndex, recyclingCategoriesIndex, materialsIndex, packagingTypesIndex);
+	    let canvasContainer = document.getElementById('canvasContainer');
+	    canvasContainer.innerHTML = ''; // Clear previous canvas
+	    canvas.style.maxWidth = '100%'; // Ensure canvas is responsive
+	    canvasContainer.appendChild(canvas); // Add new canvas
+	});
+
+	// Populate dropdowns on page load
+	populateDropdowns();
     </script>
+
 </body>
 </html>
+
