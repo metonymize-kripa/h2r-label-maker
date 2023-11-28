@@ -264,6 +264,28 @@ canvas {
 
 	// Populate dropdowns on page load
 	populateDropdowns();
+
+	// Add event listeners for download buttons
+        document.getElementById('downloadPngButton').addEventListener('click', function() {
+            downloadCanvasAsImage('png');
+        });
+
+        document.getElementById('downloadSvgButton').addEventListener('click', function() {
+            downloadCanvasAsImage('svg');
+        });
+
+        // Function to download the canvas as an image
+        function downloadCanvasAsImage(format) {
+            let canvas = document.querySelector('canvas');
+            if (!canvas) return;
+
+            let imageType = format === 'png' ? 'image/png' : 'image/svg+xml';
+            let imageData = canvas.toDataURL(imageType);
+            let link = document.createElement('a');
+            link.download = `label-image.${format}`;
+            link.href = imageData;
+            link.click();
+        }
     </script>
 
 </body>
