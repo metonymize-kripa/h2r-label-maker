@@ -21,7 +21,6 @@ canvas {
 
         }
     </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.1/canvg.min.js"></script>
 </head>
 <body>
     <div class="container mt-3">
@@ -58,7 +57,6 @@ canvas {
                     </div>
 
                     <button id="createButton" class="btn btn-primary">Create Label</button>
-		    <button id="downloadSvgButton" class="btn btn-info">Download as SVG</button>
 			<!-- Comment out download buttons
 	            <button id="downloadPngButton" class="btn btn-success">Download as PNG</button>
 	            <button id="downloadSvgButton" class="btn btn-info">Download as SVG</button>
@@ -272,33 +270,6 @@ canvas {
 	// Populate dropdowns on page load
 	populateDropdowns();
 
-	// Event listener for SVG download button
-        document.getElementById('downloadSvgButton').addEventListener('click', function() {
-            downloadCanvasAsSvg();
-        });
-
-        // Function to download the canvas as SVG
-        function downloadCanvasAsSvg() {
-            let canvas = document.querySelector('canvas');
-            if (!canvas) return;
-
-            // Use canvg to convert the canvas to SVG
-            let svgData = canvg.Canvg.fromString(canvas.getContext('2d'), canvas.toDataURL());
-            let svgString = svgData.getSerializedSvg(true);
-
-            // Create a Blob from the SVG data
-            let blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-            let url = URL.createObjectURL(blob);
-
-            // Create a download link and click it to start the download
-            let link = document.createElement('a');
-            link.download = 'label-image.svg';
-            link.href = url;
-            link.click();
-
-            // Clean up the URL object
-            URL.revokeObjectURL(url);
-        }
     </script>
 
 </body>
